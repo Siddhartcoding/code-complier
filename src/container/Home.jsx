@@ -5,9 +5,12 @@ import { MdHome } from "react-icons/md";
 import { motion } from "framer-motion";
 import { Link, Route, Routes } from "react-router-dom";
 import logo from "../assits/logo.png";
-export const Home = () => {
+import { Projects, SignUp } from "../container";
+import { useSelector } from "react-redux";
+import { UserProfileDetails } from "../components";
+const Home = () => {
   const [isSideMenu, SetisSideMenu] = useState(false);
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user?.user);
   return (
     <>
       <div
@@ -105,14 +108,16 @@ export const Home = () => {
               </Link>
             </motion.div>
           )}
-          {user && <div> </div>}
-          <div className="w-full">
-            <Routes>
-              <Route path="/*" />
-            </Routes>
-          </div>
+        </div>
+        {user && <UserProfileDetails />}
+        <div className="w-full">
+          <Routes>
+            <Route path="/*" element={<Projects />} />
+            <Route path="/auth" element={<SignUp />} />
+          </Routes>
         </div>
       </div>
     </>
   );
 };
+export default Home;
