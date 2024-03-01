@@ -108,8 +108,9 @@ const Home = () => {
               </Link>
             </motion.div>
           )}
+          {user && <UserProfileDetails />}
         </div>
-        {user && <UserProfileDetails />}
+
         <div className="w-full">
           <Routes>
             <Route path="/*" element={<Projects />} />
