@@ -8,6 +8,12 @@ import { Link } from "react-router-dom";
 import logo from "../assits/logo.png";
 import { AnimatePresence, motion } from "framer-motion";
 import { MdCheck, MdEdit } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { UserProfileDetails } from "../components";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../config/firebase.config";
+import { Alert } from "../components";
+
 const NewProject = () => {
   const [html, setHtml] = useState("");
   const [css, setCss] = useState("");
@@ -15,7 +21,8 @@ const NewProject = () => {
   const [output, setOutput] = useState("");
   const [isTittle, setIsTittle] = useState("");
   const [title, setTitle] = useState("Untitled");
-
+  const user = useSelector((state) => state.user.user);
+  const [alert, setAlert] = useState(true);
   useEffect(() => {
     updateOutput();
   }, [html, css, js]);
@@ -34,7 +41,22 @@ const NewProject = () => {
     `;
     setOutput(combineOutput);
   };
+  const saveProgram = async () => {
+    const id = `${Date.now()}`;
+    const _doc = {
+      id: id,
+      title: title,
+      html: html,
+      css: css,
+      js: js,
+      output: output,
+      user: user,
+    };
 
+    await setDoc(doc(db, "projects", id), _doc)
+      .then((res) => {})
+      .catch((err) => console.log(err));
+  };
   return (
     <>
       <div
@@ -42,7 +64,9 @@ const NewProject = () => {
         justify-start overflow-hidden"
       >
         {/* ------alert section-------- */}
-
+        <AnimatePresence>
+          {alert && <Alert status={"Success"} alertMsg={"Project Saved.."} />}
+        </AnimatePresence>
         {/*--------------- header section-----------*/}
         <header className=" w-full flex items-center justify-between px-12 py-4">
           <div className="flex items-center justify-center gap-6">
@@ -63,7 +87,7 @@ const NewProject = () => {
                         key={"TittleInput"}
                         type="text"
                         placeholder="Your Title"
-                        className="px3 py-2 rounded-md bg-transparent text-primaryText text-base outline-none border-none"
+                        className="px3 py-2 rounded-md bg-transparent text-primaryText text-base outline-none border-none "
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                       />
@@ -106,9 +130,34 @@ const NewProject = () => {
                 </AnimatePresence>
               </div>
               {/* follow section */}
+              <div className="flex item-center justify-center px-3 -mt-2 gap-2">
+                <p className=" text-primaryText text-sm">
+                  {user?.displayName
+                    ? user?.displayName
+                    : `${user?.email.split("@")[0]}`}
+                </p>
+                <motion.p
+                  whileTap={{ scale: 0.9 }}
+                  className="text-[10px] bg-emerald-500 rounded-sm
+                   px-2 py-[1px] text-primary font-semibold cursor-pointer"
+                >
+                  + Follow
+                </motion.p>
+              </div>
             </div>
           </div>
-          {/*------------------- user-section ------------------------------*/}
+          {/*------------------user-section---------------------------*/}
+          {user && (
+            <div className="flex items-center justify-center gap-4">
+              <motion.button
+                onClick={saveProgram}
+                className="px-6 py-4 bg-primaryText cursor-pointer text-base text-primary font-semibold rounded-md"
+              >
+                Save
+              </motion.button>
+              <UserProfileDetails />
+            </div>
+          )}
         </header>
 
         {/* ------------ coding section----------- */}
