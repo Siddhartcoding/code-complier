@@ -4,17 +4,18 @@ import { FcSettings } from "react-icons/fc";
 import SplitPane from "react-split-pane";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../assits/logo.png";
 import { AnimatePresence, motion } from "framer-motion";
 import { MdCheck, MdEdit } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { UserProfileDetails } from "../components";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebase.config";
 import { Alert } from "../components";
 
-const NewProject = () => {
+const UpdateProject = () => {
+  const location = useLocation();
   const [html, setHtml] = useState("");
   const [css, setCss] = useState("");
   const [js, setJs] = useState("");
@@ -23,6 +24,26 @@ const NewProject = () => {
   const [title, setTitle] = useState("Untitled");
   const user = useSelector((state) => state.user.user);
   const [alert, setAlert] = useState(false);
+  const [update, setUpdate] = useState({
+    title: "",
+    html: "",
+    css: "",
+    js: "",
+  });
+
+  const updateproject = useSelector(
+    (state) => state.updateProject?.updateProject
+  );
+
+  useEffect(() => {
+    setUpdate(updateproject);
+    setTitle(updateproject.title);
+    setHtml(updateproject.html);
+    setCss(updateproject.css);
+    setJs(updateproject.js);
+    setOutput(updateproject.output);
+  }, []);
+
   useEffect(() => {
     updateOutput();
   }, [html, css, js]);
@@ -41,10 +62,9 @@ const NewProject = () => {
     `;
     setOutput(combineOutput);
   };
-  const saveProgram = async () => {
-    const id = `${Date.now()}`;
+
+  const updateProgram = async () => {
     const _doc = {
-      id: id,
       title: title,
       html: html,
       css: css,
@@ -53,14 +73,16 @@ const NewProject = () => {
       user: user,
     };
 
-    await setDoc(doc(db, "Projects", id), _doc)
-      .then((res) => {
-        setAlert(true);
-      })
-      .catch((err) => console.log(err));
-    setInterval(() => {
-      setAlert(false);
-    }, 2000);
+    try {
+      // Use the updateDoc function to update an existing document in Firestore
+      await updateDoc(doc(db, "Projects", updateproject.id), _doc);
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+      }, 2000);
+    } catch (err) {
+      console.error("Error updating document: ", err);
+    }
   };
   return (
     <>
@@ -70,7 +92,7 @@ const NewProject = () => {
       >
         {/* ------alert section-------- */}
         <AnimatePresence>
-          {alert && <Alert status={"Success"} alertMsg={"Project Saved.."} />}
+          {alert && <Alert status={"Success"} alertMsg={"Project Updated.."} />}
         </AnimatePresence>
         {/*--------------- header section-----------*/}
         <header className=" w-full flex items-center justify-between px-12 py-4">
@@ -160,10 +182,10 @@ const NewProject = () => {
           {user && (
             <div className="flex items-center justify-center gap-4">
               <motion.button
-                onClick={saveProgram}
+                onClick={updateProgram}
                 className="px-6 py-4 bg-primaryText cursor-pointer text-base text-primary font-semibold rounded-md"
               >
-                Save
+                Update
               </motion.button>
               <UserProfileDetails />
             </div>
@@ -293,4 +315,4 @@ const NewProject = () => {
   );
 };
 
-export default NewProject;
+export default UpdateProject;

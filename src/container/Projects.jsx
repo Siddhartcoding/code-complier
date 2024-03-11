@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { MdBookmark } from "react-icons/md";
-
+import { useNavigate } from "react-router-dom";
+import { SET_UPDATE_PROJECT } from "../context/actions/updateProjectAction";
 const Projects = () => {
   const projects = useSelector((state) => state.projects?.projects);
   const [filtered, setFiltered] = useState(null);
@@ -48,9 +49,26 @@ const Projects = () => {
   );
 };
 const ProjectCard = ({ project, index }) => {
+  const navigate = useNavigate();
+  const projectDetails = project;
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user?.user);
+
+  const handleProjectDetails = () => {
+    dispatch(SET_UPDATE_PROJECT(project));
+    {
+      project.user.email === user.email &&
+        navigate("/updateProject", {
+          // state: {
+          //   project: project,
+          // },
+        });
+    }
+  };
   return (
     <motion.div
       key={index}
+      onClick={handleProjectDetails}
       className="w-full cursor-pointer md:w-[450px] h-[375px] bg-secondary
       p-4 rounded-md flex flex-col items-center justify-center gap-4"
     >

@@ -15,6 +15,7 @@ import { Spinner } from "./components";
 import { useDispatch } from "react-redux";
 import { SET_USER } from "./context/actions/userActions";
 import { SET_PROJECTS } from "./context/actions/projectActions";
+import UpdateProject from "./container/Updateproject";
 
 function App() {
   const navigate = useNavigate();
@@ -23,7 +24,6 @@ function App() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userCred) => {
       if (userCred) {
-        console.log(userCred?.providerData[0].email);
         setDoc(doc(db, "users", userCred?.uid), userCred?.providerData[0]).then(
           () => {
             //dispatch the action to store
@@ -68,6 +68,7 @@ function App() {
           <Routes>
             <Route path="/home/*" element={<Home />} />
             <Route path="/newProject" element={<NewProject />} />
+            <Route path="/updateProject" element={<UpdateProject />} />
             {/* if the route not matching */}
             <Route path="*" element={<Navigate to={"/home"} />} />
           </Routes>

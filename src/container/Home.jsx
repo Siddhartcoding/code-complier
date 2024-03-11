@@ -37,11 +37,16 @@ const Home = () => {
         {/* -------------------------------------logo section ---------------------------*/}
         <div className="overflow-hidden w-full flex flex-col gap-4">
           <Link to={"home"}>
-            <img
-              src={logo}
-              alt="logo"
-              className="bg-white object-contain w-72 h-auto"
-            />
+            <div className="w-full flex justify-start items-center">
+              <img
+                src={logo}
+                alt="logo"
+                className="object-contain xl:w-[60px] h-auto sm:w-10"
+              />
+              <p className=" text-primaryText xl:text-2xl sm:text-sm font-bold">
+                CodeCraft
+              </p>
+            </div>
           </Link>
 
           {/*---------------------------------- start coding  section -------------------------*/}
