@@ -21,7 +21,7 @@ const NewProject = () => {
   const [output, setOutput] = useState("");
   const [isTittle, setIsTittle] = useState("");
   const [title, setTitle] = useState("Untitled");
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user?.user);
   const [alert, setAlert] = useState(false);
   useEffect(() => {
     updateOutput();

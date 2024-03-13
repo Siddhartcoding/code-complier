@@ -3,7 +3,8 @@ import { HiChevronDoubleLeft } from "react-icons/hi2";
 import { FaSearchengin } from "react-icons/fa6";
 import { MdHome } from "react-icons/md";
 import { motion } from "framer-motion";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Alert } from "../components";
 import logo from "../assits/logo.png";
 import { Projects, SignUp } from "../container";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,9 +16,20 @@ const Home = () => {
   const searchTerm = useSelector((state) =>
     state.searchTerm?.searchTerm ? state.searchTerm?.searchTerm : ""
   );
+  const [showAlert, setShowAlert] = useState(false);
+  const navigate = useNavigate();
+
+  const handleUserPresent = () => {
+    if (user) {
+      navigate("/newProject");
+    } else {
+      setShowAlert(true);
+    }
+  };
   const dispatch = useDispatch();
   return (
     <>
+      {showAlert && <Alert status={"Warning"} alertMsg={"Login First.."} />}
       <div
         className={`w-2 ${isSideMenu ? "w-2" : " flex-[.2] xl: flex-[.2]"}
         min-h-screen max-h-screen  bg-secondary relative px-3 py-6 flex flex-col 
@@ -52,6 +64,7 @@ const Home = () => {
           {/*---------------------------------- start coding  section -------------------------*/}
           <Link to={"/newProject"}>
             <div
+              onClick={handleUserPresent}
               className="px-6 py-3 flex items-center justify-center
           rounded-xl border border-gray-400 cursor-pointer
            group hover:border-gray-200"
@@ -123,9 +136,9 @@ const Home = () => {
           {user && <UserProfileDetails />}
         </div>
 
-        <div className="w-full">
+        <div className="w-full overflow-y-scroll no-scrollbar">
           <Routes>
-            <Route path="/*" element={<Projects />} />
+            <Route path="/*" cl element={<Projects />} />
             <Route path="/auth" element={<SignUp />} />
           </Routes>
         </div>
