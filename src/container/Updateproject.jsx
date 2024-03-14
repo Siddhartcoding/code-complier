@@ -222,7 +222,7 @@ const UpdateProject = () => {
                     <FaChevronDown className="text-xl text-primaryText" />
                   </div>
                 </div>
-                <div className="w-full px-2">
+                <div className=" px-2 w-full">
                   <CodeMirror
                     value={html}
                     height="600px"
@@ -231,6 +231,7 @@ const UpdateProject = () => {
                     onChange={(value, viewUpdate) => {
                       setHtml(value);
                     }}
+                    className=""
                   />
                 </div>
               </div>

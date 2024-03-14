@@ -156,8 +156,9 @@ const NewProject = () => {
               </div>
             </div>
           </div>
+
           {/*------------------user-section---------------------------*/}
-          {user && (
+          {user ? (
             <div className="flex items-center justify-center gap-4">
               <motion.button
                 onClick={saveProgram}
@@ -167,6 +168,14 @@ const NewProject = () => {
               </motion.button>
               <UserProfileDetails />
             </div>
+          ) : (
+            <Link
+              to={"/home/auth"}
+              className="bg-emerald-500 px-6 py-2 rounded-md
+          cursor-pointer hover:bg-emerald-700"
+            >
+              SignUp
+            </Link>
           )}
         </header>
 
@@ -184,7 +193,7 @@ const NewProject = () => {
             <SplitPane split="vertical" minSize={500}>
               {/*-------------- html code--------------- */}
 
-              <div className="w-full h-full flex flex-col items-start justify-start">
+              <div className="w-full h-full flex flex-col items-start justify-start ">
                 <div className="w-full flex items-center justify-between">
                   <div className=" bg-secondary px-4 py-2 border-t-4 flex items-center justify-center gap-3">
                     <FaHtml5 className="text-xl text-red-500 " />
@@ -283,7 +292,11 @@ const NewProject = () => {
               <iframe
                 title="Result"
                 srcDoc={output}
-                style={{ border: "none", width: "100%", height: "100%" }}
+                style={{
+                  border: "none",
+                  width: "100%",
+                  height: "100%",
+                }}
               />
             </div>
           </SplitPane>

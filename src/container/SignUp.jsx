@@ -78,7 +78,7 @@ const SignUp = () => {
       <div className="w-full flex flex-col items-center justify-center ">
         <p className="py-2 text-2xl text-primaryText">Join with Us!😊</p>
         <div
-          className="px-8 w-full md:w-auto  rounded-xl bg-secondary 
+          className="px-8 w-auto md:w-auto  h-[600px] rounded-xl bg-secondary 
           shadow-xl flex flex-col items-center justify-center gap-7"
         >
           {/* ---------------email------------ */}
