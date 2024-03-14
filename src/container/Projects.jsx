@@ -77,6 +77,10 @@ const ProjectCard = ({ project, index }) => {
       {showAlert && <Alert status={"Warning"} alertMsg={"Login First.."} />}
       <motion.div
         key={index}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5, delay: index * 0.2 }}
         onClick={handleProjectDetails}
         className="w-full cursor-pointer md:w-[450px] h-[375px] bg-secondary
       p-4 rounded-md flex flex-col items-center justify-center gap-4"
